@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val clearmethod = View.OnClickListener { v ->
-            operand1 = 0.0
+            operand1 = null
             operand2 = 0.0
             secondnum.text.clear()
             result.text.clear()
