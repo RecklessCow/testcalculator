@@ -2,19 +2,19 @@ package com.example.testcalculator
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.os.PersistableBundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import java.lang.NumberFormatException
 
-private const val TAG = "mainactivity"
+//private const val TAG = "mainActivity"
+private const val idKey = "keyForStoring"
 
 class MainActivity : AppCompatActivity() {
-    //klir
     private val result by lazy(LazyThreadSafetyMode.NONE) { findViewById<EditText>(R.id.result) }
-    private val secondnum by lazy(LazyThreadSafetyMode.NONE) { findViewById<EditText>(R.id.secondnum) }
+    private val secondNum by lazy(LazyThreadSafetyMode.NONE) { findViewById<EditText>(R.id.secondnum) }
     private val displayOperation by lazy(LazyThreadSafetyMode.NONE) { findViewById<TextView>(R.id.operation) }
 
     // variables to store operands
@@ -42,21 +42,21 @@ class MainActivity : AppCompatActivity() {
         //operations buttons
         val buttonPlus: Button = findViewById(R.id.buttonplus)
         val buttonMinus: Button = findViewById(R.id.buttonminus)
-        val buttonDevide: Button = findViewById(R.id.buttondevide)
+        val buttonDivide: Button = findViewById(R.id.buttondevide)
         val buttonMultiply: Button = findViewById(R.id.buttonmultiply)
         val buttonEquals: Button = findViewById(R.id.buttonequals)
-        val buttonclear: Button = findViewById(R.id.clearbutton)
+        val buttonClear: Button = findViewById(R.id.clearbutton)
 
         //????????????????????????????????????
         val listener = View.OnClickListener { v ->
             val b = v as Button
-            secondnum.append(b.text)
+            secondNum.append(b.text)
         }
 
-        val clearmethod = View.OnClickListener { v ->
+        val clearMethod = View.OnClickListener {
             operand1 = null
             operand2 = 0.0
-            secondnum.text.clear()
+            secondNum.text.clear()
             result.text.clear()
         }
 
@@ -71,25 +71,25 @@ class MainActivity : AppCompatActivity() {
         button8.setOnClickListener(listener)
         button9.setOnClickListener(listener)
         buttonDot.setOnClickListener(listener)
-        buttonclear.setOnClickListener(clearmethod)
+        buttonClear.setOnClickListener(clearMethod)
 
-        fun performOperation(value: String, operation: String) {
-            if(operand1 == null){
-                operand1 = value.toDouble()
+        fun performOperation(value: Double, operation: String) {
+            if (operand1 == null) {
+                operand1 = value
 
-            }else {
-                operand2 = value.toDouble()
+            } else {
+                operand2 = value
 
-                if(pendingOperation == "="){
+                if (pendingOperation == "=") {
                     pendingOperation = operation
                 }
 
-                when(pendingOperation){
+                when (pendingOperation) {
                     "=" -> operand1 = operand2
-                    "/" -> if(operand2 == 0.0){
-                            operand1 = Double.NaN
-                    }else{
-                        operand1 = operand1!! / operand2
+                    "/" -> operand1 = if (operand2 == 0.0) {
+                        Double.NaN
+                    } else {
+                        operand1!! / operand2
                     }
                     "*" -> operand1 = operand1!! * operand2
                     "+" -> operand1 = operand1!! + operand2
@@ -98,15 +98,17 @@ class MainActivity : AppCompatActivity() {
 
             }
             result.setText(operand1.toString())
-            secondnum.text.clear()
+            secondNum.text.clear()
             operand2 = 0.0
         }
 
         val opListener = View.OnClickListener { v ->
             val op = (v as Button).text.toString()
-            val value = secondnum.text.toString()
-            if (value.isNotEmpty()) {
+            try {
+                val value = secondNum.text.toString().toDouble()
                 performOperation(value, op)
+            } catch (e: NumberFormatException) {
+                secondNum.text.clear()
             }
             pendingOperation = op
             displayOperation.text = pendingOperation
@@ -115,7 +117,17 @@ class MainActivity : AppCompatActivity() {
         buttonEquals.setOnClickListener(opListener)
         buttonPlus.setOnClickListener(opListener)
         buttonMinus.setOnClickListener(opListener)
-        buttonDevide.setOnClickListener(opListener)
+        buttonDivide.setOnClickListener(opListener)
         buttonMultiply.setOnClickListener(opListener)
     }
-}
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        outState.putDouble(idKey, operand1!!)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+            operand1 = savedInstanceState.getDouble(idKey)
+        }
+    }
