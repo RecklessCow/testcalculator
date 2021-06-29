@@ -7,10 +7,13 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.google.android.material.slider.BaseOnChangeListener
 import java.lang.NumberFormatException
 
 //private const val TAG = "mainActivity"
-private const val idKey = "keyForStoring"
+private const val OPERANDKEY = "operand1"
+private const val PENDINGOPERATION = "pendingOperation"
+private const val OPERANDSECONDKEY = "operand2"
 
 class MainActivity : AppCompatActivity() {
     private val result by lazy(LazyThreadSafetyMode.NONE) { findViewById<EditText>(R.id.result) }
@@ -121,13 +124,17 @@ class MainActivity : AppCompatActivity() {
         buttonMultiply.setOnClickListener(opListener)
     }
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        outState.putDouble(idKey, operand1!!)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putDouble(OPERANDKEY, operand1!!)
+        outState.putDouble(OPERANDSECONDKEY, operand2)
+        outState.putString(PENDINGOPERATION, pendingOperation)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-            operand1 = savedInstanceState.getDouble(idKey)
+            operand1 = savedInstanceState.getDouble(OPERANDKEY)
+            operand2 = savedInstanceState.getDouble(OPERANDSECONDKEY)
+            pendingOperation = savedInstanceState.getString(PENDINGOPERATION).toString()
         }
     }
