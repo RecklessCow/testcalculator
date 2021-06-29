@@ -2,23 +2,18 @@ package com.example.testcalculator
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import com.google.android.material.slider.BaseOnChangeListener
 import java.lang.NumberFormatException
+import kotlinx.android.synthetic.main.activity_main.*
 
 //private const val TAG = "mainActivity"
 private const val OPERANDKEY = "operand1"
 private const val PENDINGOPERATION = "pendingOperation"
 private const val OPERANDSECONDKEY = "operand2"
 
+
 class MainActivity : AppCompatActivity() {
-    private val result by lazy(LazyThreadSafetyMode.NONE) { findViewById<EditText>(R.id.result) }
-    private val secondNum by lazy(LazyThreadSafetyMode.NONE) { findViewById<EditText>(R.id.secondnum) }
-    private val displayOperation by lazy(LazyThreadSafetyMode.NONE) { findViewById<TextView>(R.id.operation) }
 
     // variables to store operands
     private var operand1: Double? = null
@@ -29,37 +24,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //number buttons
-        val button0: Button = findViewById(R.id.button0)
-        val button1: Button = findViewById(R.id.button1)
-        val button2: Button = findViewById(R.id.button2)
-        val button3: Button = findViewById(R.id.button3)
-        val button4: Button = findViewById(R.id.button4)
-        val button5: Button = findViewById(R.id.button5)
-        val button6: Button = findViewById(R.id.button6)
-        val button7: Button = findViewById(R.id.button7)
-        val button8: Button = findViewById(R.id.button8)
-        val button9: Button = findViewById(R.id.button9)
-        val buttonDot: Button = findViewById(R.id.buttondot)
-
-        //operations buttons
-        val buttonPlus: Button = findViewById(R.id.buttonplus)
-        val buttonMinus: Button = findViewById(R.id.buttonminus)
-        val buttonDivide: Button = findViewById(R.id.buttondevide)
-        val buttonMultiply: Button = findViewById(R.id.buttonmultiply)
-        val buttonEquals: Button = findViewById(R.id.buttonequals)
-        val buttonClear: Button = findViewById(R.id.clearbutton)
-
         //????????????????????????????????????
         val listener = View.OnClickListener { v ->
             val b = v as Button
-            secondNum.append(b.text)
+                secondnum.append(b.text)
         }
 
         val clearMethod = View.OnClickListener {
             operand1 = null
             operand2 = 0.0
-            secondNum.text.clear()
+            secondnum.text.clear()
             result.text.clear()
         }
 
@@ -73,8 +47,8 @@ class MainActivity : AppCompatActivity() {
         button7.setOnClickListener(listener)
         button8.setOnClickListener(listener)
         button9.setOnClickListener(listener)
-        buttonDot.setOnClickListener(listener)
-        buttonClear.setOnClickListener(clearMethod)
+        buttondot.setOnClickListener(listener)
+        clearbutton.setOnClickListener(clearMethod)
 
         fun performOperation(value: Double, operation: String) {
             if (operand1 == null) {
@@ -101,32 +75,34 @@ class MainActivity : AppCompatActivity() {
 
             }
             result.setText(operand1.toString())
-            secondNum.text.clear()
+            secondnum.text.clear()
             operand2 = 0.0
         }
 
         val opListener = View.OnClickListener { v ->
             val op = (v as Button).text.toString()
             try {
-                val value = secondNum.text.toString().toDouble()
+                val value = secondnum.text.toString().toDouble()
                 performOperation(value, op)
             } catch (e: NumberFormatException) {
-                secondNum.text.clear()
+                secondnum.text.clear()
             }
             pendingOperation = op
-            displayOperation.text = pendingOperation
+            operation.text = pendingOperation
         }
 
-        buttonEquals.setOnClickListener(opListener)
-        buttonPlus.setOnClickListener(opListener)
-        buttonMinus.setOnClickListener(opListener)
-        buttonDivide.setOnClickListener(opListener)
-        buttonMultiply.setOnClickListener(opListener)
+        buttonequals.setOnClickListener(opListener)
+        buttonplus.setOnClickListener(opListener)
+        buttonminus.setOnClickListener(opListener)
+        buttondevide.setOnClickListener(opListener)
+        buttonmultiply.setOnClickListener(opListener)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putDouble(OPERANDKEY, operand1!!)
+        operand1?.let {
+            outState.putDouble(OPERANDKEY, it)
+        }
         outState.putDouble(OPERANDSECONDKEY, operand2)
         outState.putString(PENDINGOPERATION, pendingOperation)
     }
@@ -135,6 +111,6 @@ class MainActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
             operand1 = savedInstanceState.getDouble(OPERANDKEY)
             operand2 = savedInstanceState.getDouble(OPERANDSECONDKEY)
-            pendingOperation = savedInstanceState.getString(PENDINGOPERATION).toString()
+            operation.text = savedInstanceState.getString(PENDINGOPERATION)
         }
     }
