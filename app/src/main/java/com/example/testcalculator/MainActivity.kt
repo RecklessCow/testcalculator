@@ -92,21 +92,16 @@ class MainActivity : AppCompatActivity() {
             operation.text = pendingOperation
         }
 
-
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        val negation = View.OnClickListener {
-            operand1 = operand1?.minus((operand1!! * 2))
-            var x: Double? = null
-
-            if(secondnum.text.isNotEmpty()){
+        negButton.setOnClickListener {
+            var x: Double
+            if (secondnum.text.isNotEmpty() && secondnum.text.toString() != "-" && secondnum.text.toString() != ".") {
                 x = secondnum.text.toString().toDouble()
-                x -= x * 2
-            }
-
-            if(operand1 != null){
-                result.setText(operand1.toString())
-            }else {
+                x *= -1
                 secondnum.setText(x.toString())
+            } else if (secondnum.text.isEmpty()) {
+                secondnum.append("-")
+            } else {
+                secondnum.text.clear()
             }
         }
 
@@ -115,7 +110,6 @@ class MainActivity : AppCompatActivity() {
         buttonminus.setOnClickListener(opListener)
         buttondevide.setOnClickListener(opListener)
         buttonmultiply.setOnClickListener(opListener)
-        negButton.setOnClickListener(negation)
 
     }
 
