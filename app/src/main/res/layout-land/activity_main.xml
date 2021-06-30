@@ -11,14 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:ems="10"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,10 +98,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
         android:minWidth="48dip"
         android:text="7"
-        app:layout_constraintEnd_toEndOf="@+id/secondnum"
-        app:layout_constraintHorizontal_bias="0.31"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/result"
         app:layout_constraintTop_toBottomOf="@+id/secondnum" />
 
@@ -224,14 +223,29 @@
         android:id="@+id/secondnum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:ems="10"
         android:focusableInTouchMode="true"
         android:inputType="numberSigned|numberDecimal"
         app:layout_constraintBaseline_toBaselineOf="@+id/result"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.36"
-        app:layout_constraintStart_toEndOf="@+id/result" />
+        app:layout_constraintStart_toStartOf="@+id/guideline4" />
+
+    <Button
+        android:id="@+id/negButton"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="NEG"
+        app:layout_constraintBottom_toTopOf="@+id/buttonmultiply"
+        app:layout_constraintStart_toEndOf="@+id/buttondevide"
+        app:layout_constraintTop_toBottomOf="@+id/secondnum" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

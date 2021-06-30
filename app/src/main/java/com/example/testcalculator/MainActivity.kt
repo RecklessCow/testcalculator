@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
             result.text.clear()
         }
 
+
         button0.setOnClickListener(listener)
         button1.setOnClickListener(listener)
         button2.setOnClickListener(listener)
@@ -91,11 +92,31 @@ class MainActivity : AppCompatActivity() {
             operation.text = pendingOperation
         }
 
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        val negation = View.OnClickListener {
+            operand1 = operand1?.minus((operand1!! * 2))
+            var x: Double? = null
+
+            if(secondnum.text.isNotEmpty()){
+                x = secondnum.text.toString().toDouble()
+                x -= x * 2
+            }
+
+            if(operand1 != null){
+                result.setText(operand1.toString())
+            }else {
+                secondnum.setText(x.toString())
+            }
+        }
+
         buttonequals.setOnClickListener(opListener)
         buttonplus.setOnClickListener(opListener)
         buttonminus.setOnClickListener(opListener)
         buttondevide.setOnClickListener(opListener)
         buttonmultiply.setOnClickListener(opListener)
+        negButton.setOnClickListener(negation)
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
